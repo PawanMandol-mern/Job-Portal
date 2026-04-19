@@ -1,28 +1,28 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+    /* eslint-disable react-hooks/exhaustive-deps */
     import axios from "axios";
     import React, { useEffect, useState } from "react";
     import { Link, useNavigate } from "react-router-dom";
     import { useAuth } from "../context/AuthContext";
-import toast from "react-hot-toast";
+    import toast from "react-hot-toast";
 
     const Jobs = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [search , setSearch] = useState('')
-    const [location , setLocation] = useState('')
-    const [jobType , setJobType] = useState('')
+    const [search, setSearch] = useState("");
+    const [location, setLocation] = useState("");
+    const [jobType, setJobType] = useState("");
 
-    const {isAuthenticate , user} = useAuth()
-    const navigate = useNavigate()
+    const { isAuthenticate, user } = useAuth();
+    const navigate = useNavigate();
 
     const handleApplyChange = (jobId) => {
         if (!isAuthenticate) {
-            navigate('/login')
+        navigate("/login");
         } else {
-            navigate(`/apply-job/${jobId}`)
+        navigate(`/apply-job/${jobId}`);
         }
-    }
+    };
 
     // pagination
     const [page, setPage] = useState(1);
@@ -33,19 +33,19 @@ import toast from "react-hot-toast";
         setLoading(true);
 
         const res = await axios.get(
-            'http://localhost:3000/api/job/get-all-job',
+            "http://localhost:3000/api/job/get-all-job",
             {
-                params : {
-                    page,
-                    limit,
-                    keyword : search,
-                    location,
-                    jobType
-                }
+            params: {
+                page,
+                limit,
+                keyword: search,
+                location,
+                jobType,
+            },
             },
             {
             withCredentials: true,
-            }
+            },
         );
 
         setJobs(res.data.jobs);
@@ -58,44 +58,46 @@ import toast from "react-hot-toast";
 
     useEffect(() => {
         fetchJobs();
-    }, [page,search,location,jobType]);
+    }, [page, search, location, jobType]);
 
-    useEffect(() =>{
-        setPage(1)
-    },[search,jobType,location])
+    useEffect(() => {
+        setPage(1);
+    }, [search, jobType, location]);
 
-    useEffect(() =>{
+    useEffect(() => {
         const delay = setTimeout(() => {
-            fetchJobs()
+        fetchJobs();
         }, 500);
 
-        return ()=> clearTimeout(delay)
-    },[search])
+        return () => clearTimeout(delay);
+    }, [search]);
 
-    const handleDelete = async (jobId) =>{
+    const handleDelete = async (jobId) => {
         try {
-            const res = await axios.delete(`http://localhost:3000/api/job/get-delete/${jobId}`,{
-                withCredentials : true
-            })
+        const res = await axios.delete(
+            `http://localhost:3000/api/job/get-delete/${jobId}`,
+            {
+            withCredentials: true,
+            },
+        );
 
-            toast.success(res.data.message)
+        toast.success(res.data.message);
 
-            setJobs(prev => prev.filter((job) => job._id !== jobId))
+        setJobs((prev) => prev.filter((job) => job._id !== jobId));
         } catch (error) {
-            console.log('Delete Error',error.response?.data)
-            toast.error(error.response?.data?.message)
+        console.log("Delete Error", error.response?.data);
+        toast.error(error.response?.data?.message);
         }
-    }
+    };
     // loading
     if (loading) {
         return <p className="text-center mt-10">Loading jobs...</p>;
     }
 
     return (
-        <div className="flex gap-6 px-6 py-6">
-
+        <div className="flex flex-col lg:flex-row gap-6 px-4 sm:px-6 py-6">
         {/* ================= LEFT FILTER ================= */}
-        <div className="w-1/4 bg-white p-4 rounded-lg shadow-sm h-fit">
+        <div className="w-full lg:w-1/4 bg-white p-4 rounded-lg shadow-sm h-fit">
             <h2 className="text-lg font-semibold mb-3">Filters</h2>
 
             <input
@@ -106,37 +108,38 @@ import toast from "react-hot-toast";
             className="w-full mb-3 px-3 py-2 border rounded"
             />
 
-            <select 
+            <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full mb-3 px-3 py-2 border rounded">
-            <option value=''>All Location</option>
-            <option>Banglore</option>
+            className="w-full mb-3 px-3 py-2 border rounded"
+            >
+            <option value="">All Location</option>
+            <option>Bangalore</option>
             <option>Delhi</option>
-            <option>Nodia</option>
-            <option>Gujrat</option>
+            <option>Noida</option>
+            <option>Gujarat</option>
             </select>
 
-            <select 
+            <select
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
-            className="w-full mb-3 px-3 py-2 border rounded">
-            <option value=''>Job Type</option>
+            className="w-full mb-3 px-3 py-2 border rounded"
+            >
+            <option value="">Job Type</option>
             <option>Full-time</option>
             <option>Part-time</option>
             </select>
         </div>
 
         {/* ================= RIGHT JOB LIST ================= */}
-        <div className="w-3/4">
-
+        <div className="w-full lg:w-3/4">
             {/* 🔝 TOP BAR */}
-            <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+            <h2 className="text-lg sm:text-xl font-semibold">
                 {jobs.length} Jobs Found
             </h2>
 
-            <select className="border px-2 py-1 rounded">
+            <select className="border px-2 py-1 rounded w-full sm:w-auto">
                 <option>Latest</option>
                 <option>Salary</option>
             </select>
@@ -148,14 +151,12 @@ import toast from "react-hot-toast";
             )}
 
             {/* ✅ JOB GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {jobs.map((job) => (
                 <div
                 key={job._id}
-                className="bg-white p-4 border rounded-lg shadow-sm hover:shadow-md transition"
+                className="bg-white p-4 border rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between"
                 >
-
                 {/* 🔝 TOP */}
                 <div className="flex items-center gap-3 mb-2">
                     <img
@@ -165,17 +166,15 @@ import toast from "react-hot-toast";
                     />
 
                     <div>
-                    <h3 className="text-lg font-bold">{job.title}</h3>
-                    <p className="text-sm text-gray-500">
-                        {job.companyName}
-                    </p>
+                    <h3 className="text-base sm:text-lg font-bold">
+                        {job.title}
+                    </h3>
+                    <p className="text-sm text-gray-500">{job.companyName}</p>
                     </div>
                 </div>
 
                 {/* 📍 LOCATION */}
-                <p className="text-sm text-gray-500">
-                    📍 {job.location}
-                </p>
+                <p className="text-sm text-gray-500">📍 {job.location}</p>
 
                 {/* 📝 DESCRIPTION */}
                 <p className="text-sm text-gray-600 mt-1">
@@ -204,45 +203,46 @@ import toast from "react-hot-toast";
                     ))}
                 </div>
 
-                {/*  USERS */}
-                <div className="flex gap-2 mt-4">
-                    { user?.role !== 'recruiter' && (
-                        <>
-                    <button onClick={() => handleApplyChange(job._id)} className="w-full py-2 text-center bg-orange-500 text-white rounded hover:bg-orange-600">
-                    Apply
+                {/* USER BUTTONS */}
+                {user?.role !== "recruiter" && (
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                    <button
+                        onClick={() => handleApplyChange(job._id)}
+                        className="w-full py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+                    >
+                        Apply
                     </button>
 
                     <button className="w-full py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50">
-                    Details
+                        Details
                     </button>
-                        </>
-                    )}
-                </div>
+                    </div>
+                )}
 
-                {/* RECRUITER */}
-                <div className="flex gap-2 mt-4">
-                    {isAuthenticate && user.role === 'recruiter' && (
-                        <>
-                    <Link to={`/update-job/${job._id}`} className="w-full py-2 text-center bg-orange-500 text-white rounded hover:bg-orange-600">
-                    Update
+                {/* RECRUITER BUTTONS */}
+                {isAuthenticate && user?.role === "recruiter" && (
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                    <Link
+                        to={`/update-job/${job._id}`}
+                        className="w-full py-2 text-center bg-orange-500 text-white rounded hover:bg-orange-600"
+                    >
+                        Update
                     </Link>
 
-                    <button onClick={() => handleDelete(job._id)}
-                    className="w-full py-2 text-center border border-blue-500 text-blue-600 rounded hover:bg-blue-50">
-                    Delete
+                    <button
+                        onClick={() => handleDelete(job._id)}
+                        className="w-full py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50"
+                    >
+                        Delete
                     </button>
-                        
-                        </>
-                    )}
-                </div>
+                    </div>
+                )}
                 </div>
             ))}
-
             </div>
 
             {/* ================= PAGINATION ================= */}
-            <div className="flex justify-center mt-6 gap-2">
-
+            <div className="flex justify-center mt-6 gap-2 flex-wrap">
             <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
@@ -262,7 +262,6 @@ import toast from "react-hot-toast";
                 Next
             </button>
             </div>
-
         </div>
         </div>
     );
