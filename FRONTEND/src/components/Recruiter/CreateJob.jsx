@@ -4,15 +4,15 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const CreateJob = () => {
-  const [title          , setTitle] = useState("");
-  const [description    , setDescription] = useState("");
-  const [companyName    , setCompanyName] = useState("");
-  const [location       , setLocation] = useState("");
-  const [jobType        , setJobType] = useState("");
-  const [salary         , setSalary] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [location, setLocation] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [salary, setSalary] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
-  const [skillsRequired , setSkillsRequired] = useState("");
-  const [companyLogo    , setCompanyLogo] = useState(null);
+  const [skillsRequired, setSkillsRequired] = useState("");
+  const [companyLogo, setCompanyLogo] = useState(null);
   const [preview, setPreview] = useState("");
 
   // ✅ IMAGE
@@ -63,7 +63,7 @@ const CreateJob = () => {
       formData.append("skillsRequired", skillsRequired);
       formData.append("companyLogo", companyLogo);
 
-      // 🔥 DEBUG
+      //  DEBUG
       for (let pair of formData.entries()) {
         console.log(pair[0], pair[1]);
       }
@@ -73,11 +73,10 @@ const CreateJob = () => {
         formData,
         {
           withCredentials: true,
-        }
+        },
       );
 
-      toast.success(res.data.message || "Job Created 🚀");
-
+      toast.success(res.data.message || "Job Created ");
     } catch (error) {
       console.log("Error:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -86,13 +85,12 @@ const CreateJob = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-500 via-indigo-500 to-blue-500 p-4">
-
       <form
         onSubmit={fetchCreateJob}
         className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-2xl rounded-2xl p-8 w-full max-w-xl space-y-4 text-white"
       >
         <h1 className="text-3xl font-bold text-center mb-4">
-          🎉 Create New Job
+          Create New Job
         </h1>
 
         <input
@@ -166,11 +164,7 @@ const CreateJob = () => {
           </option>
         </select>
 
-        <input
-          type="file"
-          onChange={handleImageChange}
-          className="w-full"
-        />
+        <input type="file" onChange={handleImageChange} className="w-full" />
 
         {preview && (
           <img
@@ -184,7 +178,7 @@ const CreateJob = () => {
           type="submit"
           className="w-full py-3 bg-yellow-400 text-black font-semibold rounded-lg"
         >
-          🚀 Create Job
+          Create Job
         </button>
       </form>
     </div>
